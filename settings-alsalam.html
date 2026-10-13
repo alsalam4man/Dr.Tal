@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>إعدادات المنصة</title>
+<link rel="icon" href="logo-white.png">
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--deep:#0B4A55;--teal:#138A8F;--teal-2:#1FB5B0;--sky:#E6F5F5;--coral:#F2715A;--coral-2:#E0553E;--gold-50:#FFF1CC;--leaf:#3E9B5A;--leaf-50:#DDF2E3;--ink:#0D2B31;--ink-2:#4A6468;--line:#D6E9E9;--bg:#F3FAFA;--card:#fff;--danger:#C0392B;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#E8F4F4;--ink-2:#9FBCBF;--line:#1E4E55;--bg:#0A2A30;--card:#10363D;--sky:#12404A;--gold-50:#3F3416;--leaf-50:#173D27;--danger:#FF8A7A}}
+:root[data-theme="dark"]{--ink:#E8F4F4;--ink-2:#9FBCBF;--line:#1E4E55;--bg:#0A2A30;--card:#10363D;--sky:#12404A;--gold-50:#3F3416;--leaf-50:#173D27;--danger:#FF8A7A}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;font-family:'Readex Pro','Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.top{background:var(--deep);color:#fff;position:sticky;top:0;z-index:5}
+.top .in{max-width:880px;margin:auto;display:flex;align-items:center;gap:10px;padding:12px 16px}
+.top img{width:36px;height:36px}
+.top b{flex:1;font-weight:500}
+.top a,.top button{color:#fff;background:rgba(255,255,255,.12);border:0;border-radius:99px;padding:7px 14px;font:inherit;font-size:13px;text-decoration:none;cursor:pointer}
+main{max-width:880px;margin:auto;padding:20px 16px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
+.card h2{margin:0 0 4px;font-size:18px;font-weight:600;display:flex;gap:10px;align-items:center}
+.card h2 .n{width:28px;height:28px;border-radius:9px;background:var(--sky);color:var(--teal);display:grid;place-items:center;font-size:14px}
+.card p.d{margin:0 0 14px;color:var(--ink-2);font-size:14px}
+label{display:block;font-size:13px;color:var(--ink-2);margin:0 0 6px}
+input[type=text],input[type=password],input[type=number],input[type=url],textarea,select{width:100%;font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 13px}
+textarea{min-height:70px;resize:vertical}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--teal-2);outline-offset:1px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid .full{grid-column:1/-1}
+.btn{font:inherit;font-size:15px;font-weight:500;border:0;border-radius:99px;padding:11px 22px;cursor:pointer;background:var(--teal);color:#fff;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+.btn:hover{filter:brightness(1.07)}
+.btn.coral{background:var(--coral)}
+.btn.ghost{background:transparent;color:var(--teal);border:1px solid var(--line)}
+.btn.sm{font-size:13px;padding:7px 14px}
+.btn[aria-busy=true]{opacity:.7;pointer-events:none}
+.btn[aria-busy=true]::before{content:"";width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}
+.chk{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink)}
+.msg{margin-top:12px;border-radius:12px;padding:10px 14px;font-size:14px}
+.msg.ok{background:var(--leaf-50);color:var(--leaf)}
+.msg.err{background:#FDE3DC;color:var(--danger)}
+.msg.info{background:var(--gold-50);color:var(--ink)}
+.sheets{display:grid;gap:10px}
+.sh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.sh .nm{flex:1;min-width:160px}
+.sh .nm b{display:block;font-weight:500}
+.sh .nm small{color:var(--ink-2);font-size:12px}
+.badge{background:var(--leaf-50);color:var(--leaf);font-size:12px;padding:3px 10px;border-radius:99px}
+.logo-prev{width:120px;height:120px;border-radius:50%;background:var(--deep);display:grid;place-items:center;flex:none}
+.logo-prev img{width:80%;height:80%;object-fit:contain}
+.login{max-width:380px;margin:12vh auto 0;text-align:center}
+.login img{width:110px;background:var(--deep);border-radius:50%;padding:12px}
+.login h1{font-size:22px;font-weight:600;margin:14px 0 4px}
+.login form{text-align:start;margin-top:20px}
+.seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:4px;margin:14px 0}
+.seg button{font:inherit;font-size:14px;border:0;background:transparent;color:var(--ink-2);padding:7px 22px;border-radius:99px;cursor:pointer}
+.seg button.on{background:var(--teal);color:#fff}
+.phlist{margin-top:16px;display:grid;gap:14px}
+.phgrp b{display:block;font-size:13px;color:var(--ink-2);font-weight:500;margin-bottom:8px}
+.phrow{display:flex;gap:10px;flex-wrap:wrap}
+.phi{position:relative;width:96px;height:72px;border-radius:12px;overflow:hidden;background:var(--sky)}
+.phi img{width:100%;height:100%;object-fit:cover}
+.phi button{position:absolute;top:4px;left:4px;width:26px;height:26px;border-radius:50%;border:0;background:rgba(192,57,43,.92);color:#fff;font-size:15px;line-height:1;cursor:pointer}
+.phempty{font-size:13px;color:var(--ink-2)}
+.prog{height:8px;border-radius:99px;background:var(--sky);overflow:hidden;margin-top:10px}
+.prog span{display:block;height:100%;width:0;background:var(--coral);transition:width .3s}
+.hidden{display:none!important}
+@media (max-width:620px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<section class="login" id="loginView">
+  <img src="logo-white.png" alt="">
+  <h1>إعدادات منصة تبرعات التجمع الطبي في التل</h1>
+  <p style="color:var(--ink-2);margin:0">هذه الصفحة للإدارة فقط</p>
+  <form id="loginForm" class="card">
+    <label for="pw">كلمة السر</label>
+    <input type="password" id="pw" autocomplete="current-password" required>
+    <div class="row"><button class="btn" id="loginBtn" type="submit">دخول</button></div>
+    <div id="loginMsg"></div>
+  </form>
+</section>
+
+<div id="appView" class="hidden">
+  <header class="top"><div class="in">
+    <img src="logo-white.png" alt=""><b>لوحة الإعدادات</b>
+    <a href="./" target="_blank" rel="noopener">فتح الموقع</a>
+    <button id="logout" type="button">خروج</button>
+  </div></header>
+
+  <main>
+    <div id="demoMsg" class="msg info hidden" style="margin:0 0 16px">الموقع غير مربوط بـ Google بعد. أضف رابط Apps Script في ملف config.js ثم أعد رفع الموقع.</div>
+
+    <section class="card">
+      <h2><span class="n">1</span>ربط جدول Google Sheets</h2>
+      <p class="d">الصق رابط أي جدول عندك، واكبس "إنشاء". سأجهّز فيه أوراق التبرعات المالية والعينية والمشاريع والإعدادات بالتنسيق الكامل. البيانات الموجودة لا تُحذف.</p>
+      <label for="sheetUrl">رابط الجدول</label>
+      <input type="url" id="sheetUrl" placeholder="https://docs.google.com/spreadsheets/d/…" dir="ltr">
+      <div class="row">
+        <label class="chk"><input type="checkbox" id="sample"> أضف بيانات تجريبية</label>
+        <label class="chk"><input type="checkbox" id="activate" checked> اعرضه على الموقع مباشرة</label>
+      </div>
+      <div class="row"><button class="btn coral" id="genBtn" type="button">إنشاء</button></div>
+      <div id="genMsg"></div>
+    </section>
+
+    <section class="card">
+      <h2><span class="n">2</span>الجداول المرتبطة</h2>
+      <p class="d">الجدول المفعّل هو اللي يظهر على الموقع. بتقدر تبدّل بينهم بضغطة.</p>
+      <div class="sheets" id="sheets"></div>
+    </section>
+
+    <section class="card">
+      <h2><span class="n">3</span>الشعار</h2>
+      <p class="d">ارفع صورة الشعار. الأفضل PNG بخلفية شفافة. كل صورة بتنضغط تلقائيًا لأقل من 300 كيلوبايت.</p>
+      <div class="row" style="margin-top:0">
+        <div class="logo-prev"><img id="logoPrev" src="logo-white.png" alt=""></div>
+        <div style="flex:1;min-width:200px">
+          <input type="file" id="logoFile" accept="image/png,image/jpeg,image/webp,image/svg+xml">
+          <div class="row"><button class="btn" id="logoBtn" type="button">رفع الشعار</button>
+          <button class="btn ghost sm" id="logoReset" type="button">الرجوع للشعار الأصلي</button></div>
+        </div>
+      </div>
+      <div id="logoMsg"></div>
+    </section>
+
+    <section class="card">
+      <h2><span class="n">4</span><img src="shamcash.png" alt="" style="width:30px;height:30px;border-radius:8px;background:#fff">شام كاش</h2>
+      <p class="d">يظهر داخل زر "تبرع الآن". إذا تركت الرقم والباركود فارغين يظهر "قريبًا".</p>
+      <label for="shamNum">رقم الحساب</label>
+      <input type="text" id="shamNum" dir="ltr" placeholder="رقم حساب شام كاش">
+      <div class="row"><button class="btn" id="shamSave" type="button">حفظ الرقم</button></div>
+      <div class="row" style="margin-top:18px">
+        <div class="logo-prev" style="background:#fff;border:1px solid var(--line);border-radius:16px"><img id="qrPrev" alt="" style="display:none"><span id="qrNone" style="color:var(--ink-2);font-size:12px;text-align:center">لا يوجد باركود</span></div>
+        <div style="flex:1;min-width:200px">
+          <label for="qrFile">صورة الباركود</label>
+          <input type="file" id="qrFile" accept="image/*">
+          <div class="row"><button class="btn" id="qrUp" type="button">رفع الباركود</button>
+          <button class="btn ghost sm" id="shamClear" type="button">إخفاء وإرجاع "قريبًا"</button></div>
+        </div>
+      </div>
+      <div id="shamMsg"></div>
+    </section>
+
+    <section class="card">
+      <h2><span class="n">5</span>صور المشاريع (قبل وبعد)</h2>
+      <p class="d">اختر المشروع والمرحلة، وارفع صورة أو أكثر. كل صورة بتنضغط تلقائيًا لأقل من 300 كيلوبايت.</p>
+      <label for="phProj">المشروع</label>
+      <select id="phProj"><option value="">جارٍ التحميل…</option></select>
+      <div class="seg" role="radiogroup" aria-label="المرحلة">
+        <button type="button" class="on" data-ph="قبل" role="radio" aria-checked="true">قبل</button>
+        <button type="button" data-ph="بعد" role="radio" aria-checked="false">بعد</button>
+      </div>
+      <input type="file" id="phFiles" accept="image/*" multiple>
+      <div class="row"><button class="btn coral" id="phUp" type="button">رفع الصور</button></div>
+      <div id="phMsg"></div>
+      <div id="phList" class="phlist"></div>
+    </section>
+
+    <section class="card">
+      <h2><span class="n">6</span>إعدادات الموقع</h2>
+      <p class="d">تُحفظ مباشرة داخل ورقة "الإعدادات" في الجدول المفعّل.</p>
+      <form id="setForm" class="grid">
+        <div class="full"><label>اسم المنصة (العنوان الرئيسي)</label><input type="text" name="title_ar"></div>
+        <div class="full"><label>وصف قصير تحت العنوان (اختياري)</label><input type="text" name="subtitle_ar"></div>
+        <div><label>سعر الدولار بالليرة السورية</label><input type="number" name="usd_to_syp" min="0" step="any"></div>
+        <div><label>سعر الريال بالدولار</label><input type="number" name="sar_to_usd" min="0" step="any"></div>
+        <div class="full"><label>المسؤول الأول: الاسم</label><input type="text" name="contact_name"></div>
+        <div><label>المسؤول الأول: رقم الواتساب</label><input type="text" name="whatsapp" dir="ltr" placeholder="905070406368"></div>
+        <div><label>المسؤول الأول: رقم الاتصال (اختياري)</label><input type="text" name="phone1" dir="ltr" placeholder="963953943245"></div>
+        <div class="full"><label>المسؤول الثاني: الاسم (اختياري)</label><input type="text" name="contact2_name"></div>
+        <div><label>المسؤول الثاني: رقم الواتساب</label><input type="text" name="whatsapp2" dir="ltr"></div>
+        <div><label>المسؤول الثاني: رقم الاتصال</label><input type="text" name="phone2" dir="ltr"></div>
+        <div class="full"><label>رابط صفحة فيسبوك (اتركه فارغًا لإخفاء الزر)</label><input type="url" name="facebook_url" dir="ltr" placeholder="https://www.facebook.com/..."></div>
+        <div class="full"><label>رسالة الواتساب الجاهزة</label><input type="text" name="whatsapp_msg"></div>
+        <div class="full"><label>ملاحظة أعلى الإجماليات</label><textarea name="note_ar"></textarea></div>
+        <div><label>إذا ما في صورة "بعد"</label><select name="gallery_missing"><option>قريبًا</option><option>بدون</option></select></div>
+        <div><label>لون الشعار</label><select name="logo_style"><option>أبيض</option><option>أصلي</option></select></div>
+        <div><label>عدد أعلى التبرعات</label><input type="number" name="top_count" min="1" max="10"></div>
+        <div><label>التحديث التلقائي كل (ثانية)</label><input type="number" name="refresh_sec" min="15"></div>
+        <div class="full row"><button class="btn" id="saveBtn" type="submit">حفظ الإعدادات</button></div>
+      </form>
+      <div id="setMsg"></div>
+    </section>
+  </main>
+</div>
+
+<script src="config.js"></script>
+<script>
+(function(){
+const URL_ = (window.TAL_CONFIG||{}).SCRIPT_URL;
+const $ = id => document.getElementById(id);
+let PW = ''; try{ PW = sessionStorage.getItem('tal_pw') || ''; }catch(e){}
+const ERR = {wrong_password:'كلمة السر غير صحيحة',missing_url:'الصق رابط الجدول أولًا',no_active_sheet:'لا يوجد جدول مفعّل. اربط جدولًا من القسم 1',bad_image:'صيغة الصورة غير مدعومة'};
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function msg(el, type, text){ $(el).innerHTML = text ? `<div class="msg ${type}">${text}</div>` : ''; }
+async function api(action, extra){
+  if (!URL_) throw new Error('الموقع غير مربوط بعد. أضف رابط Apps Script في config.js');
+  const r = await fetch(URL_, {method:'POST', body: JSON.stringify(Object.assign({action, password: PW}, extra||{}))});
+  const d = await r.json();
+  if (!d.ok){
+    if (d.error === 'wrong_password' && action !== 'login') logout();
+    throw new Error(ERR[d.error] || d.error || 'حدث خطأ غير متوقع');
+  }
+  return d;
+}
+async function busy(btn, fn){ btn.setAttribute('aria-busy','true'); try{ return await fn(); } finally{ btn.removeAttribute('aria-busy'); } }
+
+function logout(){ PW=''; try{sessionStorage.removeItem('tal_pw');}catch(e){} $('appView').classList.add('hidden'); $('loginView').classList.remove('hidden'); }
+function enter(){ $('loginView').classList.add('hidden'); $('appView').classList.remove('hidden'); if (!URL_){ $('demoMsg').classList.remove('hidden'); loadProjects(); return; } loadSheets(); loadSettings(); loadProjects(); }
+
+$('loginForm').onsubmit = async e => {
+  e.preventDefault();
+  if (!URL_){ PW = $('pw').value; enter(); return; }
+  PW = $('pw').value;
+  try{ await busy($('loginBtn'), ()=>api('login')); try{sessionStorage.setItem('tal_pw',PW);}catch(x){} msg('loginMsg'); enter(); }
+  catch(err){ msg('loginMsg','err',esc(err.message)); }
+};
+$('logout').onclick = logout;
+
+function drawSheets(list, active){
+  $('sheets').innerHTML = list.length ? list.map(s=>`<div class="sh"><div class="nm"><b>${esc(s.name)}</b><small>${new Date(s.date).toLocaleDateString('ar-SY',{numberingSystem:'latn'})}</small></div>
+    ${s.id===active?'<span class="badge">معروض على الموقع</span>':`<button class="btn sm" data-act="${s.id}">عرض على الموقع</button>`}
+    <a class="btn ghost sm" href="${esc(s.url)}" target="_blank" rel="noopener">فتح الجدول</a>
+    <button class="btn ghost sm" data-rm="${s.id}">إزالة</button></div>`).join('')
+    : '<p class="d" style="margin:0">لا توجد جداول مرتبطة بعد. ابدأ من القسم 1.</p>';
+}
+async function loadSheets(){ try{ const d = await api('list'); drawSheets(d.sheets, d.active); }catch(e){ $('sheets').innerHTML = `<div class="msg err">${esc(e.message)}</div>`; } }
+$('sheets').onclick = async e => {
+  const a = e.target.closest('[data-act]'), r = e.target.closest('[data-rm]');
+  try{
+    if (a){ await busy(a, ()=>api('activate',{id:a.dataset.act})); await loadSheets(); loadSettings(); loadProjects(); }
+    if (r && confirm('إزالة هذا الجدول من القائمة؟ (الجدول نفسه لن يُحذف من Google)')){ const d = await busy(r, ()=>api('remove',{id:r.dataset.rm})); drawSheets(d.sheets, d.active); }
+  }catch(err){ alert(err.message); }
+};
+
+$('genBtn').onclick = async () => {
+  const url = $('sheetUrl').value.trim();
+  if (!/docs\.google\.com\/spreadsheets/.test(url)){ msg('genMsg','err','الرابط لازم يكون رابط Google Sheets'); return; }
+  msg('genMsg','info','جارٍ تجهيز الجدول… قد يستغرق حتى 30 ثانية');
+  try{
+    const d = await busy($('genBtn'), ()=>api('generate',{url, sample:$('sample').checked, activate:$('activate').checked}));
+    msg('genMsg','ok',`تم إنشاء الجدول "${esc(d.name)}" وتنسيقه بالكامل`);
+    $('sheetUrl').value=''; drawSheets(d.sheets, d.active); loadSettings(); loadProjects();
+  }catch(err){
+    const m = /permission|access|صلاحي/i.test(err.message) ? 'ما عندي صلاحية على هذا الجدول. تأكد إنه بنفس حساب Google اللي نشرت منه الخادم، أو إنك محرّر فيه' : esc(err.message);
+    msg('genMsg','err',m);
+  }
+};
+
+async function loadSettings(){
+  try{
+    const d = await api('getSettings'); const s = d.settings;
+    [...$('setForm').elements].forEach(el=>{ if (el.name && el.name in s) el.value = s[el.name]; });
+    if (s.logo_url) $('logoPrev').src = s.logo_url;
+    $('shamNum').value = s.shamcash_number || ''; showQr(s.shamcash_qr || '');
+    msg('setMsg');
+  }catch(e){ msg('setMsg','info',esc(e.message)); }
+}
+$('setForm').onsubmit = async e => {
+  e.preventDefault();
+  const settings = {};
+  [...$('setForm').elements].forEach(el=>{ if (el.name) settings[el.name] = el.type==='number' ? Number(el.value) : el.value.trim(); });
+  ['whatsapp','whatsapp2','phone1','phone2'].forEach(k=>{ settings[k] = String(settings[k]||'').replace(/\D/g,'').replace(/^00/,''); });
+  try{ await busy($('saveBtn'), ()=>api('saveSettings',{settings})); msg('setMsg','ok','تم حفظ الإعدادات، وستظهر على الموقع خلال دقيقة'); }
+  catch(err){ msg('setMsg','err',esc(err.message)); }
+};
+
+const LIMIT = 300 * 1024;
+const kb = dataUrl => Math.round((dataUrl.length - dataUrl.indexOf(',') - 1) * 3 / 4 / 1024);
+function loadImg(file){
+  return new Promise((res, rej)=>{ const fr = new FileReader(), img = new Image();
+    fr.onload = () => { img.src = fr.result; }; img.onload = () => res(img); img.onerror = rej; fr.onerror = rej; fr.readAsDataURL(file); });
+}
+// يضغط الصورة لحد أقصى 300 كيلوبايت مع الحفاظ على أفضل جودة ممكنة
+async function resize(file, maxSize, keepAlpha){
+  const img = await loadImg(file);
+  let side = Math.min(maxSize || 1600, Math.max(img.width, img.height));
+  for (let round = 0; round < 8; round++){
+    const k = side / Math.max(img.width, img.height);
+    const c = document.createElement('canvas');
+    c.width = Math.max(1, Math.round(img.width * k)); c.height = Math.max(1, Math.round(img.height * k));
+    const ctx = c.getContext('2d');
+    ctx.imageSmoothingQuality = 'high';
+    if (!keepAlpha){ ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); }
+    ctx.drawImage(img, 0, 0, c.width, c.height);
+    if (keepAlpha){
+      const png = c.toDataURL('image/png');
+      if (png.length * 0.75 <= LIMIT) return png;
+    } else {
+      for (const q of [0.88, 0.8, 0.72, 0.64, 0.56]){
+        const jpg = c.toDataURL('image/jpeg', q);
+        if (jpg.length * 0.75 <= LIMIT) return jpg;
+      }
+    }
+    side = Math.round(side * 0.82);
+  }
+  throw new Error('تعذّر ضغط الصورة، جرّب صورة أصغر');
+}
+$('logoFile').onchange = async () => { const f = $('logoFile').files[0]; if (f) { try{ const d = await resize(f, 600, true); $('logoPrev').src = d; msg('logoMsg','info','حجم الصورة بعد الضغط: ' + kb(d) + ' KB'); }catch(e){ msg('logoMsg','err',esc(e.message)); } } };
+$('logoBtn').onclick = async () => {
+  const f = $('logoFile').files[0];
+  if (!f){ msg('logoMsg','err','اختر صورة الشعار أولًا'); return; }
+  try{
+    const dataUrl = await resize(f, 600, true);
+    const d = await busy($('logoBtn'), ()=>api('uploadLogo',{dataUrl}));
+    $('logoPrev').src = d.url; msg('logoMsg','ok','تم رفع الشعار (' + kb(dataUrl) + ' KB)، وسيظهر على الموقع خلال دقيقة');
+  }catch(err){ msg('logoMsg','err',esc(err.message)); }
+};
+$('logoReset').onclick = async () => {
+  try{ await busy($('logoReset'), ()=>api('saveSettings',{settings:{logo_url:''}})); $('logoPrev').src='logo-white.png'; msg('logoMsg','ok','رجع الشعار الأصلي'); }
+  catch(err){ msg('logoMsg','err',esc(err.message)); }
+};
+
+function showQr(u){ $('qrPrev').style.display = u ? 'block' : 'none'; $('qrNone').style.display = u ? 'none' : 'block'; if (u) $('qrPrev').src = u; }
+$('qrFile').onchange = async () => { const f = $('qrFile').files[0]; if (f) { try{ const d = await resize(f, 900, true); showQr(d); msg('shamMsg','info','حجم الباركود بعد الضغط: ' + kb(d) + ' KB'); }catch(e){ msg('shamMsg','err',esc(e.message)); } } };
+$('shamSave').onclick = async () => {
+  try{ await busy($('shamSave'), ()=>api('saveSettings',{settings:{shamcash_number:$('shamNum').value.trim()}})); msg('shamMsg','ok','تم حفظ رقم الحساب، وسيظهر على الموقع خلال دقيقة'); }
+  catch(err){ msg('shamMsg','err',esc(err.message)); }
+};
+$('qrUp').onclick = async () => {
+  const f = $('qrFile').files[0];
+  if (!f){ msg('shamMsg','err','اختر صورة الباركود أولًا'); return; }
+  try{ const dataUrl = await resize(f, 900, true); const d = await busy($('qrUp'), ()=>api('uploadImage',{dataUrl, key:'shamcash_qr'})); showQr(d.url); msg('shamMsg','ok','تم رفع الباركود (' + kb(dataUrl) + ' KB)'); }
+  catch(err){ msg('shamMsg','err',esc(err.message)); }
+};
+$('shamClear').onclick = async () => {
+  if (!confirm('إخفاء رقم الحساب والباركود وإظهار "قريبًا"؟')) return;
+  try{ await busy($('shamClear'), ()=>api('saveSettings',{settings:{shamcash_number:'',shamcash_qr:''}})); $('shamNum').value=''; showQr(''); msg('shamMsg','ok','رجع يظهر "قريبًا" على الموقع'); }
+  catch(err){ msg('shamMsg','err',esc(err.message)); }
+};
+
+/* ---------- صور المشاريع ---------- */
+let PROJS = [], phPhase = 'قبل';
+document.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.seg button').forEach(x => { x.classList.toggle('on', x===b); x.setAttribute('aria-checked', String(x===b)); });
+  phPhase = b.dataset.ph;
+});
+function drawPhotos(){
+  const name = $('phProj').value, p = PROJS.find(x => x.name === name);
+  if (!p){ $('phList').innerHTML = ''; return; }
+  const grp = (phase, label) => { const L = p.photos.filter(x => x.phase === phase);
+    return `<div class="phgrp"><b>${label} (${L.length})</b><div class="phrow">${L.length ? L.map(x => `<div class="phi"><img src="${esc(x.url)}" alt="" loading="lazy"><button type="button" data-del="${esc(x.id)}" aria-label="حذف">×</button></div>`).join('') : '<span class="phempty">لا توجد صور بعد</span>'}</div></div>`; };
+  $('phList').innerHTML = grp('before','قبل') + grp('after','بعد');
+}
+async function loadProjects(){
+  if (!URL_){ PROJS = [{name:'تركيب أبواب وصيانة الشبابيك',photos:[]},{name:'صيانة صحية وكهربائية عامة',photos:[]}]; }
+  else { try{ PROJS = (await api('projects')).projects; }catch(e){ msg('phMsg','err',esc(e.message)); return; } }
+  const keep = $('phProj').value;
+  $('phProj').innerHTML = PROJS.length ? PROJS.map(p => `<option>${esc(p.name)}</option>`).join('') : '<option value="">أضف مشاريع بورقة "المشاريع" أولًا</option>';
+  if (keep && PROJS.some(p => p.name === keep)) $('phProj').value = keep;
+  drawPhotos();
+}
+$('phProj').onchange = drawPhotos;
+$('phList').onclick = async e => {
+  const b = e.target.closest('[data-del]'); if (!b) return;
+  if (!confirm('حذف هذه الصورة من الموقع والدرايف؟')) return;
+  try{ await busy(b, () => api('deletePhoto', {fileId: b.dataset.del})); await loadProjects(); msg('phMsg','ok','تم حذف الصورة'); }
+  catch(err){ msg('phMsg','err',esc(err.message)); }
+};
+$('phUp').onclick = async () => {
+  const files = [...$('phFiles').files], project = $('phProj').value;
+  if (!project){ msg('phMsg','err','اختر المشروع أولًا'); return; }
+  if (!files.length){ msg('phMsg','err','اختر صورة أو أكثر'); return; }
+  $('phUp').setAttribute('aria-busy','true');
+  let done = 0, failed = 0, total = 0;
+  for (const f of files){
+    $('phMsg').innerHTML = `<div class="msg info">جارٍ رفع ${done + failed + 1} من ${files.length}…<div class="prog"><span style="width:${(done+failed)/files.length*100}%"></span></div></div>`;
+    try{ const dataUrl = await resize(f, 1600, false); total += kb(dataUrl); await api('uploadPhoto', {project, phase: phPhase, dataUrl}); done++; }
+    catch(err){ failed++; }
+  }
+  $('phUp').removeAttribute('aria-busy'); $('phFiles').value = '';
+  msg('phMsg', failed ? 'err' : 'ok', `تم رفع ${done} صورة (${phPhase}) بحجم إجمالي ${total} KB` + (failed ? ` · فشل ${failed}` : '') + '. ستظهر على الموقع خلال دقيقة');
+  loadProjects();
+};
+
+if (PW && URL_) api('login').then(enter).catch(logout);
+})();
+</script>
+</body>
+</html>
