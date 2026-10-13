@@ -124,6 +124,15 @@ button{font-family:inherit;cursor:pointer}
 .mini small{display:block;color:var(--ink-2);font-size:12.5px}
 .mini b{font-size:20px;font-weight:600}
 .mini.count b{color:var(--coral)}
+.sep .mini.dup{display:none}
+.sep .minis{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.mini .old{display:block;font-size:11.5px;color:var(--ink-2);margin-top:2px}
+.big .old{font-size:13px;opacity:.85;margin-top:2px}
+.rate[hidden]{display:none}
+.rate{margin-top:12px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 14px;font-size:13px;color:var(--ink-2);background:var(--card);border:1px dashed var(--line);border-radius:var(--r-md);padding:9px 14px;text-align:center}
+.rate b{color:var(--ink);font-weight:600}
+.rate .src{display:inline-flex;align-items:center;gap:6px}
+.rate .src i{width:7px;height:7px;border-radius:50%;background:var(--leaf);display:inline-block}
 .mini[hidden]{display:none}
 
 .note{margin:18px 0 0;display:flex;gap:10px;align-items:center;background:var(--gold-50);color:var(--ink);border-radius:var(--r-md);padding:12px 16px;font-size:14px}
@@ -383,26 +392,28 @@ body.lock{overflow:hidden}
 <main class="wrap">
   <div class="totals">
     <div class="big usd reveal d2">
-      <h3 data-t="grandUsd">الإجمالي الكلي بالدولار</h3>
+      <h3 id="usdTitle">الإجمالي الكلي بالدولار</h3>
       <div class="val num" id="gUsd">0</div>
       <div class="cur" data-t="usdName">دولار أمريكي</div>
       <div class="coin" aria-hidden="true">$</div>
     </div>
     <div class="big syp reveal d3">
-      <h3 data-t="grandSyp">الإجمالي الكلي بالليرة السورية</h3>
+      <h3 id="sypTitle">الإجمالي الكلي بالليرة السورية الجديدة</h3>
       <div class="val num" id="gSyp">0</div>
-      <div class="cur" data-t="sypName">ليرة سورية</div>
+      <div class="cur" data-t="sypName">ليرة سورية جديدة</div>
+      <div class="old num" id="gSypOld"></div>
       <div class="coin" aria-hidden="true" style="font-size:14px">ل.س</div>
     </div>
   </div>
 
   <div class="minis">
-    <div class="mini"><small data-t="onlyUsd">تبرعات بالدولار</small><b class="num" id="mUsd">0</b></div>
-    <div class="mini"><small data-t="onlySyp">تبرعات بالليرة</small><b class="num" id="mSyp">0</b></div>
+    <div class="mini dup"><small data-t="onlyUsd">تبرعات بالدولار</small><b class="num" id="mUsd">0</b></div>
+    <div class="mini dup"><small data-t="onlySyp">تبرعات بالليرة الجديدة</small><b class="num" id="mSyp">0</b><span class="old num" id="mSypOld"></span></div>
     <div class="mini" id="sarBox" hidden><small data-t="onlySar">تبرعات بالريال</small><b class="num" id="mSar">0</b></div>
     <div class="mini count"><small data-t="count">عدد عمليات التبرع</small><b class="num" id="mCount">0</b></div>
   </div>
 
+  <div class="rate" id="rateLine" hidden></div>
   <div class="note" id="note" hidden>
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C98A00" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
     <span id="noteText"></span>
@@ -480,14 +491,16 @@ body.lock{overflow:hidden}
 <script>
 (function(){
 const I18N = {
-  ar:{live:'مباشر',raised:'تم جمع',goal:'الهدف',grandUsd:'الإجمالي الكلي بالدولار',grandSyp:'الإجمالي الكلي بالليرة السورية',usdName:'دولار أمريكي',sypName:'ليرة سورية',onlyUsd:'تبرعات بالدولار',onlySyp:'تبرعات بالليرة',onlySar:'تبرعات بالريال',count:'عدد عمليات التبرع',projects:'نسبة إتمام المشاريع',top:'أعلى التبرعات',inkind:'تبرعات عينية مميزة',recent:'آخر عمليات التبرع',more:'عرض المزيد',less:'عرض أقل',refresh:'تحديث الآن',updated:'آخر تحديث',contact:'للمساهمة والتبرع يرجى التواصل مع:',thanks:'وجزاكم الله كل خير',donate:'تبرع الآن',done:'مكتمل',inprog:'قيد التنفيذ',notStarted:'لم يبدأ بعد',left:'المتبقي',reached:'تم بلوغ الهدف، جزاكم الله خيرًا',noDon:'بانتظار أول تبرع، كن أنت صاحب البداية',noIk:'لا توجد تبرعات عينية بعد',noProj:'لا توجد مشاريع بعد',USD:'دولار',SYP:'ليرة',SAR:'ريال',qty:'الكمية',demo:'بيانات تجريبية',err:'تعذّر تحديث البيانات، سيُعاد المحاولة تلقائيًا'}
+  ar:{live:'مباشر',raised:'تم جمع',goal:'الهدف',grandUsd:'الإجمالي الكلي بالدولار',grandSyp:'الإجمالي الكلي بالليرة السورية الجديدة',usdName:'دولار أمريكي',sypName:'ليرة سورية جديدة',onlyUsd:'تبرعات بالدولار',onlySyp:'تبرعات بالليرة الجديدة',onlySar:'تبرعات بالريال',count:'عدد عمليات التبرع',projects:'نسبة إتمام المشاريع',top:'أعلى التبرعات',inkind:'تبرعات عينية مميزة',recent:'آخر عمليات التبرع',more:'عرض المزيد',less:'عرض أقل',refresh:'تحديث الآن',updated:'آخر تحديث',contact:'للمساهمة والتبرع يرجى التواصل مع:',thanks:'وجزاكم الله كل خير',donate:'تبرع الآن',done:'مكتمل',inprog:'قيد التنفيذ',notStarted:'لم يبدأ بعد',left:'المتبقي',reached:'تم بلوغ الهدف، جزاكم الله خيرًا',noDon:'بانتظار أول تبرع، كن أنت صاحب البداية',noIk:'لا توجد تبرعات عينية بعد',noProj:'لا توجد مشاريع بعد',USD:'دولار',SYP:'ل.س جديدة',SAR:'ريال',qty:'الكمية',demo:'بيانات تجريبية',err:'تعذّر تحديث البيانات، سيُعاد المحاولة تلقائيًا'}
 };
 const lang = 'ar';
 let data = null, showAll = false, lastIds = null, timer = null;
 const $ = id => document.getElementById(id);
 const t = k => I18N[lang][k] || k;
 const fmt = (n, d=0) => Number(n||0).toLocaleString('en-US',{maximumFractionDigits:d});
-const sym = c => c==='USD'?'$':c==='SAR'?'SAR':'SYP';
+const sym = c => c==='USD'?'$':c==='SAR'?'SAR':'ل.س جديدة';
+const fmtA = (n, c) => c==='SYP' ? fmt(n,2) : fmt(n);
+const fmt2 = n => Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
 
 
 // صور تجريبية تُرسم داخل المتصفح للمعاينة فقط
@@ -528,17 +541,17 @@ function demoShot(kind, seed){
 
 const DEMO = (()=>{
   const now = Date.now(), d = n => new Date(now - n*86400000).toISOString();
-  const rate = 13000, sar = 0.2667;
+  const rate = 140, sar = 0.2667;
   const dons = [
-    ['أبو مصلح طالب',1000,'USD',0],['فاعل خير',520000,'SYP',0],['فاعل خير من بيت النقيب',2000,'USD',1],
+    ['أبو مصلح طالب',1000,'USD',0],['فاعل خير',5200,'SYP',0],['فاعل خير من بيت النقيب',2000,'USD',1],
     ['أبو فادي الأغبر',1200,'USD',1],['أحمد بشير جاموس',1200,'USD',2],['الطفل تيم حجازي',25,'USD',2],
     ['توفيق عثمان + زياد جاموس',1066,'USD',3],['على روح الشهيد عبد الرحمن الأغبر',100,'USD',3],
-    ['أم محمد',3000000,'SYP',4],['فاعل خير',1500,'SAR',5],['أبو خالد',250,'USD',6],['عائلة الحلبي',8000000,'SYP',7]
+    ['أم محمد',30000,'SYP',4],['فاعل خير',1500,'SAR',5],['أبو خالد',250,'USD',6],['عائلة الحلبي',80000,'SYP',7]
   ].map((r,i)=>({i,name:r[0],amount:r[1],currency:r[2],date:d(r[3]),usd:r[2]==='USD'?r[1]:r[2]==='SYP'?r[1]/rate:r[1]*sar}));
   const sums={USD:0,SYP:0,SAR:0}; dons.forEach(x=>sums[x.currency]+=x.amount);
   const g = sums.USD + sums.SYP/rate + sums.SAR*sar;
   return {ok:true,demo:true,updated:new Date().toISOString(),
-    settings:{title_ar:'منصة تبرعات التجمع الطبي في التل',whatsapp:'905070406368',phone1:'963953943245',facebook_url:'https://www.facebook.com/share/1E2Xn9xgha/',whatsapp_msg:'السلام عليكم، أرغب بالتبرع لمنصة تبرعات التجمع الطبي في التل',note_ar:'يتم تحديث الإجمالي خلال 48 ساعة من وصول مبلغ التبرع إلى الصندوق',contact_name:'المسؤول المالي',logo_url:'',logo_style:'أبيض',refresh_sec:60},
+    settings:{title_ar:'منصة تبرعات التجمع الطبي في التل',whatsapp:'905070406368',phone1:'963953943245',facebook_url:'https://www.facebook.com/share/1E2Xn9xgha/',whatsapp_msg:'السلام عليكم، أرغب بالتبرع لمنصة تبرعات التجمع الطبي في التل',note_ar:'يتم تحديث الإجمالي خلال 48 ساعة من وصول مبلغ التبرع إلى الصندوق',contact_name:'المسؤول المالي',logo_url:'',logo_style:'أبيض',refresh_sec:60,rate_mode:'تلقائي',rate_updated:new Date().toISOString()},
     totals:{grandUsd:g,grandSyp:g*rate,usd:sums.USD,syp:sums.SYP,sar:sums.SAR,count:dons.length,rate},
     top:dons.slice().sort((a,b)=>b.usd-a.usd).slice(0,5),
     recent:dons.slice().sort((a,b)=>a.date<b.date?1:-1),
@@ -547,13 +560,14 @@ const DEMO = (()=>{
   };
 })();
 
-function countUp(el, to, dur=1600){
+function countUp(el, to, dur=1600, dec=false){
+  const f = dec ? fmt2 : fmt;
   const from = Number(el.dataset.v || 0); el.dataset.v = to;
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches || from === to){ el.textContent = fmt(to); return; }
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || from === to){ el.textContent = f(to); return; }
   const start = performance.now();
   const step = now => {
     const p = Math.min(1,(now-start)/dur), e = 1-Math.pow(1-p,4);
-    el.textContent = fmt(from + (to-from)*e);
+    el.textContent = f(from + (to-from)*e);
     if (p<1) requestAnimationFrame(step);
   };
   requestAnimationFrame(step);
@@ -623,11 +637,28 @@ function render(d, langOnly){
   $('footContacts').innerHTML = contacts.map(c=>`<div class="ln"><b>${esc(c.name)}</b></div><div class="ln">${c.wa?`<a class="call" href="https://wa.me/${c.wa}${msgQ}" target="_blank" rel="noopener">واتساب ${country(c.wa).flag} <bdi dir="ltr">${prettyNum(c.wa)}</bdi></a>`:''}${c.tel?`<a class="call" href="tel:+${c.tel}">اتصال ${country(c.tel).flag} <bdi dir="ltr">${prettyNum(c.tel)}</bdi></a>`:''}</div>`).join('');
   $('waBtn').hidden = !contacts.length;
 
-  // totals
-  countUp($('gUsd'), Math.round(T.grandUsd||0));
-  countUp($('gSyp'), Math.round(T.grandSyp||0));
+  // totals — وضعان: "محوّل" (الإجمالي الكلي بعد التحويل) أو "منفصل" (كل عملة لحالها بدون تحويل)
+  const sep = String(s.totals_mode||'').trim() === 'منفصل';
+  document.body.classList.toggle('sep', sep);
+  $('usdTitle').textContent = sep ? 'التبرعات بالدولار' : t('grandUsd');
+  $('sypTitle').textContent = sep ? 'التبرعات بالليرة السورية الجديدة' : t('grandSyp');
+  const bigUsd = sep ? (T.usd||0) : (T.grandUsd||0);
+  const bigSyp = Math.round((sep ? (T.syp||0) : (T.grandSyp||0))*100)/100;
+  countUp($('gUsd'), Math.round(bigUsd));
+  countUp($('gSyp'), bigSyp, 1600, true);
+  $('gSypOld').textContent = '≈ ' + fmt(Math.round(bigSyp*100)) + ' ليرة قديمة';
   countUp($('mUsd'), Math.round(T.usd||0), 1200);
-  countUp($('mSyp'), Math.round(T.syp||0), 1200);
+  countUp($('mSyp'), Math.round((T.syp||0)*100)/100, 1200, true);
+  $('mSypOld').textContent = '≈ ' + fmt(Math.round((T.syp||0)*100)) + ' قديمة';
+  // سعر الصرف
+  const rate = Number(T.rate)||0, auto = String(s.rate_mode||'').trim() !== 'يدوي';
+  $('rateLine').hidden = !rate || sep;
+  if (rate){
+    const upd = s.rate_updated ? new Date(s.rate_updated) : null;
+    const when = upd && !isNaN(upd) ? upd.toLocaleString('ar-SY',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'short',numberingSystem:'latn'}) : '';
+    $('rateLine').innerHTML = `<span>سعر الصرف: <b class="num">1 $ = ${fmt2(rate)}</b> ليرة جديدة <span class="num">(${fmt(Math.round(rate*100))} قديمة)</span></span>`
+      + (auto ? `<span class="src"><i></i>متوسط الشراء والمبيع من موقع الليرة اليوم${when?' · '+when:''}</span>` : '');
+  }
   countUp($('mCount'), T.count||0, 1000);
   $('sarBox').hidden = !(T.sar > 0);
   if (T.sar > 0) countUp($('mSar'), Math.round(T.sar), 1200);
@@ -649,7 +680,7 @@ function render(d, langOnly){
   const top = d.top || [];
   $('podium').innerHTML = top.length ? top.map((x,i)=>`<div class="don r${i+1}"><span class="rk">#${i+1}</span>
       <div class="medal">${i<3?i+1:'★'}</div><div class="nm">${esc(x.name)}</div>
-      <div class="amt num">${fmt(x.amount)} ${sym(x.currency)}</div></div>`).join('') : `<div class="empty" style="grid-column:1/-1">${t('noDon')}</div>`;
+      <div class="amt num">${fmtA(x.amount,x.currency)} ${sym(x.currency)}</div></div>`).join('') : `<div class="empty" style="grid-column:1/-1">${t('noDon')}</div>`;
 
   // in-kind
   const ik = d.inkind || [];
@@ -670,7 +701,7 @@ function renderRecent(d, langOnly){
   const fresh = (!langOnly && lastIds) ? new Set(ids.filter(x=>!lastIds.includes(x))) : new Set();
   lastIds = ids;
   $('recent').innerHTML = list.length ? list.map(x=>`<div class="rc${fresh.has(x.i+'|'+x.amount)?' new':''}"><div class="who"><b>${esc(x.name)}</b><small>${dateStr(x.date)}</small></div>
-     <div class="am"><span class="num">${fmt(x.amount)}</span><em>${t(x.currency)}</em></div></div>`).join('') : `<div class="empty">${t('noDon')}</div>`;
+     <div class="am"><span class="num">${fmtA(x.amount,x.currency)}</span><em>${t(x.currency)}</em></div></div>`).join('') : `<div class="empty">${t('noDon')}</div>`;
   $('moreBtn').hidden = R.length <= 5;
   $('moreBtn').textContent = showAll ? t('less') : t('more');
 }

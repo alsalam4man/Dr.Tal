@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>إعدادات المنصة</title>
-<link rel="icon" href="logo-white.png">
+<link rel="icon" type="image/png" href="icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--deep:#0B4A55;--teal:#138A8F;--teal-2:#1FB5B0;--sky:#E6F5F5;--coral:#F2715A;--coral-2:#E0553E;--gold-50:#FFF1CC;--leaf:#3E9B5A;--leaf-50:#DDF2E3;--ink:#0D2B31;--ink-2:#4A6468;--line:#D6E9E9;--bg:#F3FAFA;--card:#fff;--danger:#C0392B;
@@ -168,7 +168,10 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--teal-2);outline-
       <form id="setForm" class="grid">
         <div class="full"><label>اسم المنصة (العنوان الرئيسي)</label><input type="text" name="title_ar"></div>
         <div class="full"><label>وصف قصير تحت العنوان (اختياري)</label><input type="text" name="subtitle_ar"></div>
-        <div><label>سعر الدولار بالليرة السورية</label><input type="number" name="usd_to_syp" min="0" step="any"></div>
+        <div class="full"><label>المربعات الكبيرة على الموقع</label><select name="totals_mode"><option value="محوّل">الإجمالي الكلي بالدولار وبالليرة (بعد التحويل بسعر الصرف)</option><option value="منفصل">التبرعات بالدولار والتبرعات بالليرة كلٌّ لحاله (بدون تحويل)</option></select></div>
+        <div class="full"><label>سعر الصرف</label><select name="rate_mode"><option value="تلقائي">تلقائي كل ساعة من موقع الليرة اليوم (متوسط الشراء والمبيع)</option><option value="يدوي">يدوي (أكتبه أنا)</option></select>
+          <div class="row" style="margin-top:8px"><button class="btn ghost sm" id="rateNow" type="button">تحديث السعر الآن</button><span id="rateInfo" style="font-size:13px;color:var(--ink-2)"></span></div></div>
+        <div><label>سعر الدولار بالليرة الجديدة</label><input type="number" name="usd_to_syp" min="0" step="any"></div>
         <div><label>سعر الريال بالدولار</label><input type="number" name="sar_to_usd" min="0" step="any"></div>
         <div class="full"><label>المسؤول الأول: الاسم</label><input type="text" name="contact_name"></div>
         <div><label>المسؤول الأول: رقم الواتساب</label><input type="text" name="whatsapp" dir="ltr" placeholder="905070406368"></div>
@@ -259,6 +262,7 @@ async function loadSettings(){
     const d = await api('getSettings'); const s = d.settings;
     [...$('setForm').elements].forEach(el=>{ if (el.name && el.name in s) el.value = s[el.name]; });
     if (s.logo_url) $('logoPrev').src = s.logo_url;
+    showRateInfo(s);
     $('shamNum').value = s.shamcash_number || ''; showQr(s.shamcash_qr || '');
     msg('setMsg');
   }catch(e){ msg('setMsg','info',esc(e.message)); }
@@ -378,6 +382,20 @@ $('phUp').onclick = async () => {
   $('phUp').removeAttribute('aria-busy'); $('phFiles').value = '';
   msg('phMsg', failed ? 'err' : 'ok', `تم رفع ${done} صورة (${phPhase}) بحجم إجمالي ${total} KB` + (failed ? ` · فشل ${failed}` : '') + '. ستظهر على الموقع خلال دقيقة');
   loadProjects();
+};
+
+function showRateInfo(s){
+  const d = s.rate_updated ? new Date(s.rate_updated) : null;
+  $('rateInfo').textContent = (d && !isNaN(d)) ? 'آخر تحديث تلقائي: ' + d.toLocaleString('ar-SY',{numberingSystem:'latn'}) + ' · 1$ = ' + Number(s.usd_to_syp).toFixed(2) + ' ل.س جديدة' : '';
+}
+$('rateNow').onclick = async () => {
+  try{
+    const d = await busy($('rateNow'), ()=>api('updateRates'));
+    if (d.result === 'manual'){ msg('setMsg','info','سعر الصرف على الوضع اليدوي، غيّره لـ "تلقائي" واحفظ أولًا'); return; }
+    const f = $('setForm').elements;
+    f.usd_to_syp.value = d.settings.usd_to_syp; f.sar_to_usd.value = d.settings.sar_to_usd;
+    showRateInfo(d.settings); msg('setMsg','ok','تم تحديث سعر الصرف من موقع الليرة اليوم');
+  }catch(err){ msg('setMsg','err','تعذّر جلب السعر: ' + esc(err.message)); }
 };
 
 if (PW && URL_) api('login').then(enter).catch(logout);
