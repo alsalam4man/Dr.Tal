@@ -14,8 +14,14 @@
 - **الخادم (Apps Script):** عبر clasp
   - Script ID: `1hkumM8ZsKUZf43wCQbypdhh2t4sivNGe_OOWsSraVq_2_I3TQnPsC1JB`
   - Deployment ID (لا تغيّره، الموقع يعتمد عليه): `AKfycbwVSZvh0YgaUR7rYBtPhHF3_G3T3yXsn1Z_6I3QwUBh2kXvY1WMugmvnJ86_oPnCv4r`
-  - انسخ `google-apps-script.gs` إلى `server/Code.gs` ثم: `clasp push && clasp deploy -i <Deployment ID> -d "وصف"`
+  - مجلد `server/` (خارج git) هو نسخة clasp من المشروع؛ ملف الكود فيه اسمه `server/الرمز.js` (لا تغيّر اسمه، وإلا يُحذف ويُنشأ ملف جديد على Google).
+  - عدّل `server/الرمز.js` ثم انسخه فوق `google-apps-script.gs` (النسخة الاحتياطية في git) قبل الـ commit.
+  - قبل أي تعديل: `cd server && clasp pull` للتأكد أن لا تعديلات أحدث على Google.
   - كلمة السر في Script Properties باسم `ADMIN_PASSWORD` — لا تُكتب في الكود أبدًا.
+
+## طريقة النشر السريع
+- **الموقع:** `git push`
+- **الخادم:** `cd server && clasp push && clasp deploy -i AKfycbwVSZvh0YgaUR7rYBtPhHF3_G3T3yXsn1Z_6I3QwUBh2kXvY1WMugmvnJ86_oPnCv4r`
 
 ## البيانات
 - Google Sheet الفعّال: https://docs.google.com/spreadsheets/d/1kytPVXyTY_1cJpH8krS537jx7BrMdZrxEErztNgk6Lo/edit

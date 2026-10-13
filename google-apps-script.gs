@@ -16,13 +16,16 @@ const TABS = {
   photos: 'صور المشاريع'
 };
 
-const CURRENCIES = ['دولار', 'ليرة سورية', 'ريال سعودي'];
+const CURRENCIES = ['دولار', 'ليرة سورية جديدة', 'ريال سعودي'];
 
 const SETTINGS_ROWS = [
   ['title_ar', 'اسم المنصة', 'منصة تبرعات التجمع الطبي في التل'],
   ['subtitle_ar', 'وصف قصير تحت العنوان (اختياري)', ''],
-  ['usd_to_syp', 'سعر الدولار بالليرة السورية', 13000],
+  ['totals_mode', 'عرض الإجماليات (محوّل / منفصل)', 'محوّل'],
+  ['rate_mode', 'سعر الصرف (تلقائي / يدوي)', 'تلقائي'],
+  ['usd_to_syp', 'سعر الدولار بالليرة السورية الجديدة', 140],
   ['sar_to_usd', 'سعر الريال بالدولار', 0.2667],
+  ['rate_updated', 'آخر تحديث لسعر الصرف', ''],
   ['contact_name', 'المسؤول الأول: الاسم', 'المسؤول المالي'],
   ['whatsapp', 'المسؤول الأول: رقم الواتساب', '905070406368'],
   ['phone1', 'المسؤول الأول: رقم الاتصال', '963953943245'],
@@ -76,6 +79,7 @@ function doPost(e) {
       case 'saveSettings': saveSettings_(body.settings || {}); clearCache_(); return json_({ ok: true });
       case 'uploadLogo': return json_(uploadImage_(body.dataUrl, 'logo_url'));
       case 'uploadImage': return json_(uploadImage_(body.dataUrl, body.key));
+      case 'updateRates': return json_({ ok: true, result: updateRates(), settings: readSettings_(openActive_()) });
       case 'projects': return json_({ ok: true, projects: listProjectsWithPhotos_() });
       case 'uploadPhoto': return json_(uploadPhoto_(body.project, body.phase, body.dataUrl));
       case 'deletePhoto': return json_(deletePhoto_(body.fileId));
@@ -208,6 +212,12 @@ function buildSettings_(ss) {
   sh.getRange(2, 1, rows.length, 1).setFontColor('#9AA9AA').setFontSize(9);
   sh.setColumnWidth(1, 110); sh.setColumnWidth(2, 260); sh.setColumnWidth(3, 420);
   sh.setFrozenRows(1);
+  const tmRow = SETTINGS_ROWS.findIndex(r => r[0] === 'totals_mode') + 2;
+  sh.getRange(tmRow, 3).setDataValidation(
+    SpreadsheetApp.newDataValidation().requireValueInList(['محوّل', 'منفصل'], true).build());
+  const rmRow = SETTINGS_ROWS.findIndex(r => r[0] === 'rate_mode') + 2;
+  sh.getRange(rmRow, 3).setDataValidation(
+    SpreadsheetApp.newDataValidation().requireValueInList(['تلقائي', 'يدوي'], true).build());
   const gmRow = SETTINGS_ROWS.findIndex(r => r[0] === 'gallery_missing') + 2;
   sh.getRange(gmRow, 3).setDataValidation(
     SpreadsheetApp.newDataValidation().requireValueInList(['قريبًا', 'بدون'], true).build());
@@ -225,7 +235,7 @@ function addSamples_(ss) {
   if (money.getLastRow() < 2) {
     money.getRange(2, 1, 6, 6).setValues([
       [d(0), 'أبو مصلح طالب', 1000, 'دولار', '', 'نعم'],
-      [d(1), 'فاعل خير', 520000, 'ليرة سورية', '', 'نعم'],
+      [d(1), 'فاعل خير', 5200, 'ليرة سورية جديدة', '', 'نعم'],
       [d(1), 'أبو فادي الأغبر', 1200, 'دولار', '', 'نعم'],
       [d(2), 'فاعل خير من بيت النقيب', 2000, 'دولار', '', 'نعم'],
       [d(3), 'أحمد بشير جاموس', 1500, 'ريال سعودي', '', 'نعم'],
@@ -268,8 +278,14 @@ function saveSettings_(obj) {
   const sh = ss.getSheetByName(TABS.settings) || (buildSettings_(ss), ss.getSheetByName(TABS.settings));
   const keys = sh.getRange(2, 1, sh.getLastRow() - 1, 1).getValues().map(r => r[0]);
   Object.keys(obj).forEach(k => {
-    const i = keys.indexOf(k);
-    if (i > -1) sh.getRange(i + 2, 3).setValue(obj[k]);
+    let i = keys.indexOf(k);
+    if (i < 0) { // إعداد جديد غير موجود في الجدول: يُضاف تلقائيًا لنفس الجدول بدون إعادة إنشاء
+      const def = SETTINGS_ROWS.find(r => r[0] === k);
+      if (!def) return;
+      sh.appendRow([k, def[1], obj[k]]);
+      keys.push(k); return;
+    }
+    sh.getRange(i + 2, 3).setValue(obj[k]);
   });
 }
 
@@ -420,9 +436,43 @@ function sheetRows_(ss, name, cols) {
     .filter(r => r.some(v => v !== '' && v !== null));
 }
 
+/* ============================ Exchange rate (الليرة اليوم) ============================ */
+
+const RATE_API = 'https://api-v2.sp-today.com/api/v1/overview?lang=ar&city=damascus';
+
+/** يجلب سعر الصرف (متوسط الشراء والمبيع) ويحدّث ورقة الإعدادات — يعمل كل ساعة تلقائيًا */
+function updateRates() {
+  const ss = openActive_();
+  const s = readSettings_(ss);
+  if (String(s.rate_mode).trim() === 'يدوي') return 'manual';
+  const res = UrlFetchApp.fetch(RATE_API, { muteHttpExceptions: true, headers: { 'Accept': 'application/json', 'Origin': 'https://sp-today.com', 'Referer': 'https://sp-today.com/', 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Safari/537.36' } });
+  if (res.getResponseCode() !== 200) throw new Error('rate_http_' + res.getResponseCode());
+  const j = JSON.parse(res.getContentText());
+  const find = code => (j.data && j.data.rates || []).find(r => r.code === code);
+  const avg = r => { const c = r && r.cities && r.cities.damascus; return c ? (Number(c.buy) + Number(c.sell)) / 2 : 0; };
+  const usdOld = avg(find('USD'));           // بالليرة القديمة
+  const sarOld = avg(find('SAR'));
+  if (!(usdOld > 0)) throw new Error('rate_missing');
+  const usdNew = Math.round(usdOld) / 100;    // الليرة الجديدة = القديمة ÷ 100
+  const o = { usd_to_syp: usdNew, rate_updated: new Date().toISOString() };
+  if (sarOld > 0) o.sar_to_usd = Math.round(sarOld / usdOld * 10000) / 10000;
+  saveSettings_(o);
+  clearCache_();
+  return o;
+}
+
+/** شغّلها مرة واحدة: تنشئ التحديث التلقائي كل ساعة وتحدّث السعر فورًا */
+function setupRates() {
+  ScriptApp.getProjectTriggers().filter(t => t.getHandlerFunction() === 'updateRates').forEach(t => ScriptApp.deleteTrigger(t));
+  ScriptApp.newTrigger('updateRates').timeBased().everyHours(1).create();
+  Logger.log(JSON.stringify(updateRates()));
+}
+
 /** شغّل هذه الدالة مرة واحدة من المحرر لمنح الصلاحيات قبل النشر */
 function authorize() {
   DriveApp.getRootFolder();
   SpreadsheetApp.getActive && SpreadsheetApp.getActive();
+  UrlFetchApp.fetch(RATE_API, { muteHttpExceptions: true });
+  ScriptApp.getProjectTriggers();
   Logger.log('تم منح الصلاحيات ✔');
 }
