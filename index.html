@@ -641,10 +641,10 @@ function render(d, langOnly){
   const bigUsd = sep ? (T.usd||0) : (T.grandUsd||0);
   const bigSyp = Math.round((sep ? (T.syp||0) : (T.grandSyp||0))*100)/100;
   countUp($('gUsd'), Math.round(bigUsd));
-  countUp($('gSyp'), bigSyp, 1600, true);
+  countUp($('gSyp'), Math.round(bigSyp), 1600);
   $('gSypOld').textContent = '≈ ' + fmt(Math.round(bigSyp*100)) + ' ليرة قديمة';
   countUp($('mUsd'), Math.round(T.usd||0), 1200);
-  countUp($('mSyp'), Math.round((T.syp||0)*100)/100, 1200, true);
+  countUp($('mSyp'), Math.round(T.syp||0), 1200);
   $('mSypOld').textContent = '≈ ' + fmt(Math.round((T.syp||0)*100)) + ' قديمة';
   // سعر الصرف
   const rate = Number(T.rate)||0, auto = String(s.rate_mode||'').trim() !== 'يدوي';
