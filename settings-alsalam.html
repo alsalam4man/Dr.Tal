@@ -190,6 +190,16 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--teal-2);outline-
       </form>
       <div id="setMsg"></div>
     </section>
+    <section class="card">
+      <h2><span class="n">🔒</span>تغيير كلمة السر</h2>
+      <p class="d">كلمة السر الجديدة بتنحفظ على خادم Google مباشرة، ومش جوا كود الموقع.</p>
+      <div class="grid">
+        <div><label for="np1">كلمة السر الجديدة</label><input type="password" id="np1" autocomplete="new-password" minlength="6"></div>
+        <div><label for="np2">تأكيد كلمة السر</label><input type="password" id="np2" autocomplete="new-password" minlength="6"></div>
+      </div>
+      <div class="row"><button class="btn" id="pwBtn" type="button">تغيير كلمة السر</button></div>
+      <div id="pwMsg"></div>
+    </section>
   </main>
 </div>
 
@@ -396,6 +406,19 @@ $('rateNow').onclick = async () => {
     f.usd_to_syp.value = d.settings.usd_to_syp; f.sar_to_usd.value = d.settings.sar_to_usd;
     showRateInfo(d.settings); msg('setMsg','ok','تم تحديث سعر الصرف من موقع الليرة اليوم');
   }catch(err){ msg('setMsg','err','تعذّر جلب السعر: ' + esc(err.message)); }
+};
+
+$('pwBtn').onclick = async () => {
+  const a = $('np1').value, b = $('np2').value;
+  if (a.length < 6){ msg('pwMsg','err','كلمة السر لازم تكون 6 أحرف أو أكثر'); return; }
+  if (a !== b){ msg('pwMsg','err','كلمتا السر غير متطابقتين'); return; }
+  if (!confirm('تأكيد تغيير كلمة السر؟ رح تحتاج الجديدة بالدخول الجاي.')) return;
+  try{
+    await busy($('pwBtn'), ()=>api('changePassword',{newPassword:a}));
+    PW = a; try{ sessionStorage.setItem('tal_pw', PW); }catch(e){}
+    $('np1').value = $('np2').value = '';
+    msg('pwMsg','ok','تم تغيير كلمة السر ✓ احفظها بمكان آمن');
+  }catch(err){ msg('pwMsg','err',esc(err.message)); }
 };
 
 if (PW && URL_) api('login').then(enter).catch(logout);
